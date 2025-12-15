@@ -8,6 +8,9 @@ return {
     { import = "plugins.statusline" },
     { import = "plugins.telescope" },
     { import = "plugins.git" },
+    { import = "plugins.appearance" },
+    { import = "plugins.conform" },
+    { import = "plugins.completion" },
 }
 
 

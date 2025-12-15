@@ -25,6 +25,10 @@ map("n", "<leader>F", function()
     vim.lsp.buf.format({ async = true })
 end, { desc = "Format Buffer" })
 
+-- 左右键在行首/行尾自动跨行
+-- map({ "n", "v" }, "<Left>",  "g<Left>")
+-- map({ "n", "v" }, "<Right>", "g<Right>")
+
 
 
 

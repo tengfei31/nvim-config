@@ -20,12 +20,24 @@ return {
                 tsserver = {},
                 pyright = {},
                 intelephense = {},
+                phpactor = {
+                    cmd = { 'phpactor', 'language-server' },
+                    filetypes = { 'php' },
+                    root_markers = { '.git', 'composer.json', '.phpactor.json', '.phpactor.yml' },
+                    workspace_required = true,
+                    init_options = {
+                        ["language_server_phpstan.enabled"] = false,
+                        ["language_server_psalm.enabled"] = false,
+                    },
+                },
                 rust_analyzer = {},
             }
+            -- vim.lsp.enable('phpactor')
 
             local make = vim.lsp.config.make
 
             for name, opts in ipairs(servers) do
+                vim.lsp.enable(name)
                 opts.capabilities = capabilities
                 local config = make(name, opts)
                 vim.lsp.start(config)

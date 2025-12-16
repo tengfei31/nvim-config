@@ -7,7 +7,7 @@ map("n", "<leader>f", function()
     require("conform").format()
 end, { desc = "Format buffer" })
 map("n", "<leader>g", ":Telescope live_grep<CR>")
-map("n", "<leader>e", ":Telescope buffers<CR>")
+-- map("n", "<leader>e", ":Telescope buffers<CR>")
 map("n", "<leader>t", ":Telescope help_tags<CR>")
 
 map("n", "<leader>q", ":q<CR>")

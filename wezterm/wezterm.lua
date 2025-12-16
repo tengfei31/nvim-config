@@ -92,8 +92,8 @@ config.keys = {
       },
     },
     -- 下一个 workspace
-    { key = "]", mods = "CMD", action = act.SwitchToWorkspaceRelative(1) },
-    { key = "[", mods = "CMD", action = act.SwitchToWorkspaceRelative(-1) },
+    { key = "]", mods = "CMD", action = act.SwitchWorkspaceRelative(1) },
+    { key = "[", mods = "CMD", action = act.SwitchWorkspaceRelative(-1) },
     {
         key = "m",
         mods = "CMD|SHIFT",

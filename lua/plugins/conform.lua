@@ -19,11 +19,5 @@ return {
 		},
 	},
 	config = function()
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			pattern = "*.lua",
-			callback = function()
-				require("conform").format({ async = false })
-			end,
-		})
 	end,
 }

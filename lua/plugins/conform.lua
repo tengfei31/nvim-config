@@ -16,6 +16,7 @@ return {
 			json = { "prettier" },
 			yaml = { "prettier" },
 			sh = { "shfmt" },
+            rust = { "rustfmt" },
 		},
 	},
 	config = function()

@@ -14,7 +14,28 @@ return {
             -- local lspconfig = require("lspconfig")
 
             local servers = {
-                lua_ls = {},
+                lua_ls = {
+                    settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT",
+      },
+      diagnostics = {
+        globals = { "vim" },
+      },
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false,
+      },
+      format = {
+        enable = true, -- 关键：开启 LSP format
+      },
+    },
+  },
+                },
                 gopls = {},
                 clangd = {},
                 tsserver = {},
@@ -37,7 +58,7 @@ return {
             local make = vim.lsp.config.make
 
             for name, opts in ipairs(servers) do
-                vim.lsp.enable(name)
+                -- vim.lsp.enable(name)
                 opts.capabilities = capabilities
                 local config = make(name, opts)
                 vim.lsp.start(config)

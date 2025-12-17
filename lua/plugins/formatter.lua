@@ -12,6 +12,7 @@ return {
 				typescript = { "eslint_d" },
 				python = { "flake8" },
 				sh = { "shellcheck" },
+                lua = { "luacheck" },
 			}
 
 			vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {

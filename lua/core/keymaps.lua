@@ -25,6 +25,13 @@ map("n", "<leader>F", function()
     vim.lsp.buf.format({ async = true })
 end, { desc = "Format Buffer" })
 
+-- macOS
+if vim.fn.has("mac") == 1 then
+  map({ "n", "v" }, "<D-c>", '"+y')
+  map({ "n", "v" }, "<D-v>", '"+p')
+  map("i", "<D-v>", '<C-r>+')
+end
+
 -- 左右键在行首/行尾自动跨行
 -- map({ "n", "v" }, "<Left>",  "g<Left>")
 -- map({ "n", "v" }, "<Right>", "g<Right>")

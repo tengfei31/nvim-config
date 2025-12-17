@@ -1,5 +1,6 @@
 local o = vim.opt
 
+o.clipboard = "unnamedplus"
 o.number = true
 o.relativenumber = true
 o.cursorline = true
@@ -40,12 +41,18 @@ o.statusline = "%f %{fnamemodify(getcwd(), ':t')}"
 vim.g.format_on_save = true
 
 vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
+  callback = function(data)
     local mark = vim.api.nvim_buf_get_mark(0, '"')
     local lcount = vim.api.nvim_buf_line_count(0)
     if mark[1] > 0 and mark[1] <= lcount then
       vim.api.nvim_win_set_cursor(0, mark)
     end
+
+    -- 自动打开nvim-tree
+    if vim.fn.isdirectory(data.file) == 1 then
+      require("nvim-tree.api").tree.open()
+    end
+
   end,
 })
 

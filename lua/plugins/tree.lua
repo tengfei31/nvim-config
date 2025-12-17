@@ -10,6 +10,14 @@ return {
       renderer = {
         group_empty = true,
         highlight_git = true,
+        icons = {
+          show = {
+            git = true,
+            folder = true,
+            file = true,
+            folder_arrow = true,
+          },
+        },
       },
       filters = {
         dotfiles = false,
@@ -17,6 +25,11 @@ return {
       update_focused_file = {
         enable = true,
         update_root = false,
+      },
+      actions = {
+        open_file = {
+          quit_on_open = false, -- 打开文件时不自动关闭 tree
+        },
       },
     })
 

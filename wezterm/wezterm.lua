@@ -52,6 +52,7 @@ config.send_composed_key_when_right_alt_is_pressed = false
 -- config.macos_option_as_alt = true
 config.window_background_opacity = 0.85
 config.macos_window_background_blur = 10
+config.use_ime = true
 
 config.keys = {
     {

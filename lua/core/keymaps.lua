@@ -1,6 +1,7 @@
 local map = vim.keymap.set
 
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- map("n", "<leader>f", ":Telescope find_files<CR>")
 map("n", "<leader>f", function()
@@ -20,7 +21,6 @@ map("i", "<C-s>", "<Esc><cmd>w<cr>i", { desc = "Save" })
 -- macOS GUI 才支持 Command
 map("n", "<D-s>", "<cmd>w<cr>", { desc = "Save (Cmd+s)" })
 map("i", "<D-s>", "<Esc><cmd>w<cr>i", { desc = "Save (Cmd+s)" })
-
 map("n", "<leader>F", function()
     vim.lsp.buf.format({ async = true })
 end, { desc = "Format Buffer" })

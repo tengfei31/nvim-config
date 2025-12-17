@@ -14,6 +14,10 @@ return {
       filters = {
         dotfiles = false,
       },
+      update_focused_file = {
+        enable = true,
+        update_root = false,
+      },
     })
 
     vim.keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>")

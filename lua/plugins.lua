@@ -11,6 +11,7 @@ return {
     { import = "plugins.appearance" },
     { import = "plugins.conform" },
     { import = "plugins.completion" },
+    { import = "plugins.tree" },
 }
 
 

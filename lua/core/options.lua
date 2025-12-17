@@ -25,6 +25,13 @@ o.splitbelow = true
 o.splitright = true
 o.mouse = "a"
 
+o.foldenable = true        -- 启用折叠
+o.foldlevel = 99           -- 默认全部展开
+o.foldlevelstart = 99
+o.foldcolumn = "1"         -- 左侧显示折叠栏（推荐）
+o.foldmethod = "expr"
+o.foldexpr = "v:lua.vim.lsp.foldexpr()"
+
 o.clipboard = "unnamedplus"
 o.statusline = "%f %{fnamemodify(getcwd(), ':t')}"
     

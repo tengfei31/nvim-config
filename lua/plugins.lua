@@ -12,6 +12,9 @@ return {
     { import = "plugins.conform" },
     { import = "plugins.completion" },
     { import = "plugins.tree" },
+    { import = "plugins.indent-blankline" },
+    { import = "plugins.nvim-ufo" },
+
 }
 
 

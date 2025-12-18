@@ -8,37 +8,37 @@ return {
         },
         config = function()
             require("mason").setup({})
+            require("mason-lspconfig").setup({})
             require("neodev").setup({})
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
-            -- local lspconfig = require("lspconfig")
 
             local servers = {
                 lua_ls = {
                     settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-      },
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file("", true),
-        checkThirdParty = false,
-      },
-      telemetry = {
-        enable = false,
-      },
-      format = {
-        enable = true, -- 关键：开启 LSP format
-      },
-    },
-  },
+                        Lua = {
+                            runtime = {
+                                version = "LuaJIT",
+                            },
+                            diagnostics = {
+                                globals = { "vim" },
+                            },
+                            workspace = {
+                                library = vim.api.nvim_get_runtime_file("", true),
+                                checkThirdParty = false,
+                            },
+                            telemetry = {
+                                enable = false,
+                            },
+                            format = {
+                                enable = true, -- 关键：开启 LSP format
+                            },
+                        },
+                    },
                 },
                 gopls = {},
                 clangd = {},
-                tsserver = {},
+                ts_ls = {},
                 pyright = {},
                 intelephense = {},
                 phpactor = {
@@ -53,15 +53,11 @@ return {
                 },
                 rust_analyzer = {},
             }
-            -- vim.lsp.enable('phpactor')
 
-            local make = vim.lsp.config.make
-
-            for name, opts in ipairs(servers) do
-                -- vim.lsp.enable(name)
+            for name, opts in pairs(servers) do
                 opts.capabilities = capabilities
-                local config = make(name, opts)
-                vim.lsp.start(config)
+                vim.lsp.config(name, opts)
+                vim.lsp.enable(name)
             end
 
             vim.keymap.set("n", "gd", vim.lsp.buf.definition)
@@ -72,4 +68,3 @@ return {
         end
     }
 }
-

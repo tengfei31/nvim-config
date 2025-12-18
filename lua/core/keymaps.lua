@@ -36,6 +36,13 @@ end
 -- map({ "n", "v" }, "<Left>",  "g<Left>")
 -- map({ "n", "v" }, "<Right>", "g<Right>")
 
+-- 普通模式下 Ctrl + / 注释当前行
+map("n", "<leader>_", "gcc", { remap = true, desc = "Comment line" })
+map("n", "<leader>/", "gcc", { remap = true, desc = "Comment line" })
+-- 可视模式下 Ctrl + / 注释选中区域
+map("v", "<leader>_", "gc", { remap = true, desc = "Comment selection" })
+map("v", "<leader>/", "gc", { remap = true, desc = "Comment selection" })
+
 
 
 

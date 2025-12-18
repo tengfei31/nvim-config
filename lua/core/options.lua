@@ -1,6 +1,5 @@
 local o = vim.opt
 
-o.clipboard = "unnamedplus"
 o.number = true
 o.relativenumber = true
 o.cursorline = true

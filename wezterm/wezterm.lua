@@ -24,22 +24,22 @@ local history = wezterm.plugin.require "https://github.com/mikkasendke/sessioniz
 history.apply_to_config(config)
 
 wezterm.on('format-tab-title', function(tab)
-  local pane = tab.active_pane
-  local ws = tab.window.workspace
-  local process = pane.foreground_process_name or ''
-  local cwd = pane.current_working_dir or ''
+    local pane = tab.active_pane
+    local ws = tab.window.workspace
+    local process = pane.foreground_process_name or ''
+    local cwd = pane.current_working_dir or ''
 
-  local proc = process:match("([^/]+)$") or process
-  local dir = cwd:gsub('(.*[/\\])', '')
+    local proc = process:match("([^/]+)$") or process
+    local dir = cwd:gsub('(.*[/\\])', '')
 
-  local title = proc
-  if dir ~= '' then
-    title = dir .. ' · ' .. proc
-  end
+    local title = proc
+    if dir ~= '' then
+        title = dir .. ' · ' .. proc
+    end
 
-  return {
-    { Text = ' [' .. ws .. '] ' .. tab.tab_index + 1 .. ': ' .. title .. ' ' },
-  }
+    return {
+        { Text = ' [' .. ws .. '] ' .. tab.tab_index + 1 .. ': ' .. title .. ' ' },
+    }
 end)
 
 config.initial_cols = 140
@@ -56,41 +56,41 @@ config.use_ime = true
 
 config.keys = {
     {
-      key = 'LeftArrow',
-      mods = 'OPT',
-      action = wezterm.action.SendKey { key = 'b', mods = 'META' },
+        key = 'LeftArrow',
+        mods = 'OPT',
+        action = wezterm.action.SendKey { key = 'b', mods = 'META' },
     },
     {
-      key = 'RightArrow',
-      mods = 'OPT',
-      action = wezterm.action.SendKey { key = 'f', mods = 'META' },
+        key = 'RightArrow',
+        mods = 'OPT',
+        action = wezterm.action.SendKey { key = 'f', mods = 'META' },
     },
     { -- 重命名tab
-      key = 'r',
-      mods = 'CMD|SHIFT',
-      action = wezterm.action.PromptInputLine {
-        description = 'Rename Tab',
-        action = wezterm.action_callback(function(window, pane, line)
-          if line then
-            window:active_tab():set_title(line)
-          end
-        end),
-      },
+        key = 'r',
+        mods = 'CMD|SHIFT',
+        action = wezterm.action.PromptInputLine {
+            description = 'Rename Tab',
+            action = wezterm.action_callback(function(window, pane, line)
+                if line then
+                    window:active_tab():set_title(line)
+                end
+            end),
+        },
     },
     -- 创建 / 切换 workspace
     {
-      key = "w",
-      mods = "CMD|SHIFT",
-      action = act.PromptInputLine {
-        description = "Enter workspace name",
-        action = wezterm.action_callback(function(window, pane, line)
-          if line then
-            window:perform_action(act.SwitchToWorkspace {
-              name = line,
-            }, pane)
-          end
-        end),
-      },
+        key = "w",
+        mods = "CMD|SHIFT",
+        action = act.PromptInputLine {
+            description = "Enter workspace name",
+            action = wezterm.action_callback(function(window, pane, line)
+                if line then
+                    window:perform_action(act.SwitchToWorkspace {
+                        name = line,
+                    }, pane)
+                end
+            end),
+        },
     },
     -- 下一个 workspace
     { key = "]", mods = "CMD", action = act.SwitchWorkspaceRelative(1) },
@@ -110,7 +110,19 @@ config.keys = {
             end),
         },
     },
+    { key = 'a', mods = 'CMD',  action = act.CopyMode 'MoveToStartOfLine' },
+    { key = 'e', mods = 'CMD',  action = act.CopyMode 'MoveToEndOfLineContent' },
+    { key = 'u', mods = 'CTRL', action = act.CopyMode 'ClearPattern' },
+
 }
+
+-- config.key_tables = {
+--     search_mode = {
+--         { key = 'a', mods = 'CMD',  action = act.CopyMode 'MoveToStartOfLine' },
+--         { key = 'e', mods = 'CMD',  action = act.CopyMode 'MoveToEndOfLineContent' },
+--         { key = 'u', mods = 'CTRL', action = act.CopyMode 'ClearPattern' },
+--     },
+-- }
 
 -- local helpers = require 'helpers'
 -- helpers.apply_to_config(config)

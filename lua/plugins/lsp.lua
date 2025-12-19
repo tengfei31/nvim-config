@@ -11,6 +11,12 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     -- "bashls",
+                    "rust_analyzer",
+                    "phpactor",
+                    "ts_ls",
+                    "clangd",
+                    "lua_ls",
+                    "gopls",
                 }
             })
             require("neodev").setup({})

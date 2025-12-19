@@ -8,12 +8,23 @@ return {
         },
         config = function()
             require("mason").setup({})
-            require("mason-lspconfig").setup({})
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    -- "bashls",
+                }
+            })
             require("neodev").setup({})
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
             local servers = {
+                sh = {},
+                bashls = {
+                    filetypes = { "sh", "bash", "zsh" },
+                    settings = {
+                        globPattern = "*@(.sh|.inc|.bash|.command|.zsh)",
+                    },
+                },
                 lua_ls = {
                     settings = {
                         Lua = {

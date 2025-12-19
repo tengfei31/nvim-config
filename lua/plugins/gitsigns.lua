@@ -6,9 +6,9 @@ return {
             current_line_blame_opts = {
                 virt_text = true,
                 virt_text_pos = 'eol', -- 选项：'eol' (行尾), 'overlay', 'right_align'
-                delay = 500,           -- 光标停顿多久后显示 (毫秒)
+                delay = 100,           -- 光标停顿多久后显示 (毫秒)
             },
-            current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d> - <summary>',
+            current_line_blame_formatter = '<author>, <author_time:%Y-%m-%d %H:%m> - <summary>',
             on_attach = function(bufnr)
                 local gs = package.loaded.gitsigns
                 -- 快捷键查看详细 blame 弹窗

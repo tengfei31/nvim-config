@@ -1,5 +1,6 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
+local mux = wezterm.mux
 
 local config = wezterm.config_builder()
 
@@ -7,8 +8,8 @@ local myPluginConfig = { enable = true, location = 'right' }
 local nvim = wezterm.plugin.require 'https://github.com/mrjones2014/smart-splits.nvim'
 nvim.apply_to_config(config, myPluginConfig)
 
-local bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm")
-bar.apply_to_config(config)
+-- local bar = wezterm.plugin.require("https://github.com/adriankarlen/bar.wezterm")
+-- bar.apply_to_config(config)
 
 local cmd_sender = wezterm.plugin.require("https://github.com/aureolebigben/wezterm-cmd-sender")
 cmd_sender.apply_to_config(config)
@@ -25,9 +26,12 @@ history.apply_to_config(config)
 
 wezterm.on('format-tab-title', function(tab)
     local pane = tab.active_pane
-    local ws = tab.window.workspace
     local process = pane.foreground_process_name or ''
-    local cwd = pane.current_working_dir or ''
+    local cwd_uri = pane.current_working_dir
+    local cwd = ''
+    if cwd_uri then
+        cwd = cwd_uri.file_path or ''
+    end
 
     local proc = process:match("([^/]+)$") or process
     local dir = cwd:gsub('(.*[/\\])', '')
@@ -35,6 +39,14 @@ wezterm.on('format-tab-title', function(tab)
     local title = proc
     if dir ~= '' then
         title = dir .. ' · ' .. proc
+    end
+
+    local ws = ''
+    if tab.window_id then
+        local win = mux.get_window(tab.window_id)
+        if win then
+            ws = win:get_workspace()
+        end
     end
 
     return {
@@ -45,6 +57,17 @@ end)
 config.initial_cols = 140
 config.initial_rows = 40
 config.font_size = 14
+config.adjust_window_size_when_changing_font_size = false
+config.font = wezterm.font_with_fallback {
+  -- "JetBrains Mono Nerd Font",
+  "JetBrains Mono",
+  "PingFang SC",
+}
+-- config.font = wezterm.font_with_fallback {
+--   { family = "JetBrains Mono Nerd Font", weight = "Regular" },
+--   { family = "JetBrains Mono", weight = "Regular" },
+--   { family = "PingFang SC", weight = "Regular" },
+-- }
 -- config.color_scheme = 'Batman'
 config.enable_tab_bar = true
 config.send_composed_key_when_left_alt_is_pressed = false
@@ -53,6 +76,7 @@ config.send_composed_key_when_right_alt_is_pressed = false
 config.window_background_opacity = 0.85
 config.macos_window_background_blur = 10
 config.use_ime = true
+-- config.allow_square_glyphs_to_overflow_width = false
 
 config.keys = {
     {

@@ -22,9 +22,11 @@ return {
             require("neodev").setup({})
 
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            capabilities.general = capabilities.general or {}
+            capabilities.general.positionEncodings = { "utf-16" }
 
             local servers = {
-                sh = {},
+                -- sh = {},
                 bashls = {
                     filetypes = { "sh", "bash", "zsh" },
                     settings = {
@@ -54,7 +56,20 @@ return {
                     },
                 },
                 gopls = {},
-                clangd = {},
+                clangd = {
+                    cmd = {
+                        "clangd",
+                        "--background-index",
+                        "--clang-tidy",
+                        "--completion-style=detailed",
+                        "--header-insertion=iwyu",
+                        "--fallback-style=LLVM",
+                        "--log=error",
+                    },
+                    on_attach = function(client)
+                        -- client.server_capabilities.semanticTokensProvider = nil
+                    end,
+                },
                 ts_ls = {},
                 pyright = {},
                 -- intelephense = {},
@@ -82,6 +97,8 @@ return {
             vim.keymap.set("n", "K", vim.lsp.buf.hover)
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
             vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
+
+            vim.lsp.set_log_level("error")
         end
     }
 }

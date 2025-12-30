@@ -50,7 +50,7 @@ wezterm.on('format-tab-title', function(tab)
     end
 
     return {
-        { Text = ' [' .. ws .. '] ' .. tab.tab_index + 1 .. ': ' .. title .. ' ' },
+        { Text = tab.tab_index + 1 .. ': ' .. title .. ' ' },
     }
 end)
 

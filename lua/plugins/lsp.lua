@@ -13,7 +13,7 @@ return {
                     -- "bashls",
                     "rust_analyzer",
                     "phpactor",
-                    "ts_ls",
+                    -- "ts_ls",
                     "clangd",
                     "lua_ls",
                     "gopls",
@@ -70,20 +70,63 @@ return {
                         -- client.server_capabilities.semanticTokensProvider = nil
                     end,
                 },
-                ts_ls = {},
-                pyright = {},
+                -- ts_ls = {},
+                -- pyright = {},
                 -- intelephense = {},
                 phpactor = {
                     cmd = { 'phpactor', 'language-server' },
                     filetypes = { 'php' },
-                    -- root_markers = { '.git', 'composer.json', '.phpactor.json', '.phpactor.yml' },
-                    -- workspace_required = true,
-                    init_options = {
-                        ["language_server_phpstan.enabled"] = false,
-                        ["language_server_psalm.enabled"] = false,
+                    settings = {
+                        phpactor = {
+                            language_server_phpstan = {
+                                enabled = false,
+                            },
+                            language_server_psalm = {
+                                enabled = false,
+                            },
+                        },
                     },
                 },
-                rust_analyzer = {},
+                rust_analyzer = {
+                    settings = {
+                        ["rust-analyzer"] = {
+                            cargo = {
+                                -- allFeatures = false,
+                                loadOutDirsFromCheck = true,
+                            },
+                            rustc = {
+                                source = "discover",
+                            },
+                            procMacro = {
+                                enable = true,
+                            },
+                            inlayHints = {
+                                enable = true,
+
+                                parameterHints = {
+                                    enable = true,
+                                },
+
+                                typeHints = {
+                                    enable = true,
+                                },
+
+                                chainingHints = {
+                                    enable = true,
+                                },
+
+                                lifetimeElisionHints = {
+                                    enable = "skip_trivial",
+                                },
+                            },
+                        },
+                    },
+                    on_attach = function(client, bufnr)
+                        if client.server_capabilities.inlayHintProvider then
+                            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                        end
+                    end,
+                },
             }
 
             for name, opts in pairs(servers) do
@@ -99,6 +142,18 @@ return {
             vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
 
             vim.lsp.set_log_level("error")
+            vim.lsp.inlay_hint.enable(true)
+
+            vim.diagnostic.config({
+                virtual_text = {
+                    prefix = "●",
+                    spacing = 4,
+                },
+                signs = true,
+                underline = true,
+                update_in_insert = false,
+                severity_sort = true,
+            })
         end
     }
 }

@@ -24,6 +24,7 @@ return {
             local capabilities = require("cmp_nvim_lsp").default_capabilities()
             capabilities.general = capabilities.general or {}
             capabilities.general.positionEncodings = { "utf-16" }
+            capabilities.positionEncodings = { "utf-16" }
 
             local servers = {
                 -- sh = {},
@@ -74,7 +75,7 @@ return {
                 -- pyright = {},
                 -- intelephense = {},
                 phpactor = {
-                    cmd = { 'phpactor', 'language-server' },
+                    cmd = { "phpactor", "language-server" },
                     filetypes = { 'php' },
                     settings = {
                         phpactor = {
@@ -130,7 +131,15 @@ return {
             }
 
             for name, opts in pairs(servers) do
-                opts.capabilities = capabilities
+                -- 拷贝一份 capabilities 避免污染其他服务器
+                local server_capabilities = vim.deepcopy(capabilities)
+    
+                -- 专门针对 clangd 屏蔽那个讨厌的警告
+                if name == "clangd" then
+                    server_capabilities.offsetEncoding = { "utf-16" } 
+                end
+
+                opts.capabilities = server_capabilities
                 vim.lsp.config(name, opts)
                 vim.lsp.enable(name)
             end

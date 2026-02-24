@@ -1,7 +1,7 @@
 local o = vim.opt
 
 o.number = true
-o.relativenumber = true
+-- o.relativenumber = true  -- 显示相对行号
 o.cursorline = true
 o.termguicolors = true
 o.smartindent = true
@@ -34,8 +34,6 @@ o.foldexpr = "v:lua.vim.lsp.foldexpr()"
 
 o.clipboard = "unnamedplus"
 o.statusline = "%f %{fnamemodify(getcwd(), ':t')}"
-    
-    
 
 vim.g.format_on_save = true
 

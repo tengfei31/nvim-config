@@ -77,6 +77,12 @@ return {
                 phpactor = {
                     cmd = { "phpactor", "language-server" },
                     filetypes = { 'php' },
+                    init_options = {
+                        ["language_server_phpstan.enabled"] = false,
+                        ["language_server_psalm.enabled"] = false,
+                        ["language_server_worse_reflection.diagnostics.enable"] = true,
+                        ["indexing.max_size"] = 1000000000, -- 调大一点，确保 vendor 能被完全索引
+                    },
                     settings = {
                         phpactor = {
                             language_server_phpstan = {
@@ -87,6 +93,11 @@ return {
                             },
                         },
                     },
+                    -- 这里的 on_attach 会在下方的循环中被正确挂载
+                    on_attach = function(client, bufnr)
+                        -- 你可以在这里针对 phpactor 做特殊处理
+                        -- client.server_capabilities.completionProvider = true
+                    end,
                 },
                 rust_analyzer = {
                     settings = {
@@ -133,10 +144,10 @@ return {
             for name, opts in pairs(servers) do
                 -- 拷贝一份 capabilities 避免污染其他服务器
                 local server_capabilities = vim.deepcopy(capabilities)
-    
+
                 -- 专门针对 clangd 屏蔽那个讨厌的警告
                 if name == "clangd" then
-                    server_capabilities.offsetEncoding = { "utf-16" } 
+                    server_capabilities.offsetEncoding = { "utf-16" }
                 end
 
                 opts.capabilities = server_capabilities

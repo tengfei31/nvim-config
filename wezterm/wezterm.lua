@@ -54,14 +54,52 @@ wezterm.on('format-tab-title', function(tab)
     }
 end)
 
+wezterm.on('update-right-status', function(window, pane)
+    local scroll = pane:get_dimensions().active_line
+    local total = pane:get_dimensions().scrollback_rows
+    window:set_right_status(wezterm.format({
+        { Text = string.format(" Pos: %d/%d ", scroll, total) },
+    }))
+end)
+
+wezterm.on('update-status', function(window, pane)
+    -- 获取当前面板的维度信息
+    local dims = pane:get_dimensions()
+    local status = ""
+
+    -- active_line 是当前视口的第一行
+    -- scrollback_rows 是整个缓冲区的行数
+    -- viewport_rows 是当前窗口能显示的行数
+
+    if dims.active_line == 0 then
+        status = " TOP "
+    elseif dims.active_line + dims.viewport_rows >= dims.scrollback_rows then
+        status = " BOT "
+    elseif dims.active_line + dims.viewport_rows < dims.scrollback_rows then
+        -- 计算百分比
+        local percent = math.floor(dims.active_line / (dims.scrollback_rows - dims.viewport_rows) * 100)
+        status = string.format(" %d%% ", percent)
+    else
+        -- 回到最底部时显示时间或为空
+        status = wezterm.strftime(" %H:%M:%S ")
+    end
+
+    window:set_right_status(wezterm.format({
+        { Foreground = { Color = '#89b4fa' } }, -- 经典的淡蓝色，符合 macOS 审美
+        { Background = { Color = '#1e1e2e' } },
+        { Attribute = { Italic = true } },
+        { Text = status },
+    }))
+end)
+
 config.initial_cols = 140
 config.initial_rows = 40
 config.font_size = 14
 config.adjust_window_size_when_changing_font_size = false
 config.font = wezterm.font_with_fallback {
-  -- "JetBrains Mono Nerd Font",
-  "JetBrains Mono",
-  "PingFang SC",
+    -- "JetBrains Mono Nerd Font",
+    "JetBrains Mono",
+    "PingFang SC",
 }
 -- config.font = wezterm.font_with_fallback {
 --   { family = "JetBrains Mono Nerd Font", weight = "Regular" },
@@ -70,6 +108,10 @@ config.font = wezterm.font_with_fallback {
 -- }
 -- config.color_scheme = 'Batman'
 config.enable_tab_bar = true
+config.enable_scroll_bar = true -- 开启滚动条
+-- 4. 如果你使用的是 fancy tab bar，可以调整它的渲染
+config.use_fancy_tab_bar = true
+config.scrollback_lines = 100000
 config.send_composed_key_when_left_alt_is_pressed = false
 config.send_composed_key_when_right_alt_is_pressed = false
 -- config.macos_option_as_alt = true
@@ -77,6 +119,21 @@ config.window_background_opacity = 0.85
 config.macos_window_background_blur = 10
 config.use_ime = true
 -- config.allow_square_glyphs_to_overflow_width = false
+
+config.colors = {
+    -- 自定义滚动条颜色
+    scrollbar_thumb = '#585b70', -- 滚动滑块的颜色
+    -- 如果你想让背景也有一点颜色（通常默认是透明或背景色）
+    -- scroll_bar_bg = '#1e1e2e',
+}
+
+-- 如果你觉得默认的滚动条太占地方，可以配合窗口内边距调整
+config.window_padding = {
+    left = '1cell',
+    right = '7pt', -- 给右侧留出一点空隙，防止滚动条紧贴边缘
+    top = 0,
+    bottom = 0,
+}
 
 config.keys = {
     {

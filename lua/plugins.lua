@@ -7,7 +7,6 @@ return {
     -- { import = "plugins.filetree" },
     { import = "plugins.statusline" },
     { import = "plugins.telescope" },
-    { import = "plugins.git" },
     { import = "plugins.appearance" },
     { import = "plugins.conform" },
     { import = "plugins.tree" },

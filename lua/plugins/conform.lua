@@ -20,6 +20,4 @@ return {
             bash = { "shfmt" },
         },
     },
-    config = function()
-    end,
 }

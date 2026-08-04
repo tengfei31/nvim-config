@@ -21,15 +21,15 @@ map("i", "<C-s>", "<Esc><cmd>w<cr>i", { desc = "Save" })
 -- macOS GUI 才支持 Command
 map("n", "<D-s>", "<cmd>w<cr>", { desc = "Save (Cmd+s)" })
 map("i", "<D-s>", "<Esc><cmd>w<cr>i", { desc = "Save (Cmd+s)" })
-map("n", "<leader>F", function()
-    vim.lsp.buf.format({ async = true })
-end, { desc = "Format Buffer" })
+map("n", "<leader>cf", function()
+	vim.lsp.buf.format({ async = true })
+end, { desc = "Format code" })
 
 -- macOS
 if vim.fn.has("mac") == 1 then
-    map({ "n", "v" }, "<D-c>", '"+y')
-    map({ "n", "v" }, "<D-v>", '"+p')
-    map("i", "<D-v>", '<C-r>+')
+	map({ "n", "v" }, "<D-c>", '"+y')
+	map({ "n", "v" }, "<D-v>", '"+p')
+	map("i", "<D-v>", "<C-r>+")
 end
 
 -- 左右键在行首/行尾自动跨行
@@ -52,4 +52,3 @@ map({ "n", "v" }, "<M-f>", "w", { desc = "Next word" })
 -- 插入模式（不退出 insert）
 map("i", "<M-b>", "<C-o>b", { desc = "Prev word (insert)" })
 map("i", "<M-f>", "<C-o>w", { desc = "Next word (insert)" })
-

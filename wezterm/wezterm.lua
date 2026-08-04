@@ -34,7 +34,7 @@ wezterm.on('format-tab-title', function(tab)
     end
 
     local proc = process:match("([^/]+)$") or process
-    local dir = cwd:gsub('(.*[/\\])', '')
+    local dir = cwd:gsub('(.*[/\\])', ''):gsub('(.*[/\\])', '')
 
     local title = proc
     if dir ~= '' then

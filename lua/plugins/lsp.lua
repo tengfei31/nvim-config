@@ -17,6 +17,7 @@ return {
                     "clangd",
                     "lua_ls",
                     "gopls",
+                    "jdtls",
                 }
             })
             require("neodev").setup({})

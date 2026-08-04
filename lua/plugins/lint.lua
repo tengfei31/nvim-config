@@ -1,4 +1,4 @@
--- lua/plugins/formatter.lua
+-- lua/plugins/lint.lua
 return {
     {
         "mfussenegger/nvim-lint",
@@ -21,15 +21,10 @@ return {
                 end,
             })
 
-            -- 命令：手动格式化当前 buffer
-            vim.api.nvim_create_user_command("Format", function(opts)
-                vim.lsp.buf.format({ async = false })
-            end, { desc = "Format current buffer with LSP/null-ls" })
-
-            -- 快捷键（可放到 core/keymaps.lua）
-            vim.keymap.set("n", "<leader>F", function()
-                vim.cmd("Format")
-            end, { desc = "Format buffer" })
+            -- 手动格式化命令（快捷键 <leader>cf 在 core/keymaps.lua）
+            vim.api.nvim_create_user_command("Format", function()
+                vim.lsp.buf.format({ async = true })
+            end, { desc = "Format current buffer with LSP" })
         end,
     },
 }

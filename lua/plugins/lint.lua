@@ -21,7 +21,7 @@ return {
                 end,
             })
 
-            -- 手动格式化命令（快捷键 <leader>cf 在 core/keymaps.lua）
+            -- 手动格式化命令（快捷键 <leader>l 在 core/keymaps.lua）
             vim.api.nvim_create_user_command("Format", function()
                 vim.lsp.buf.format({ async = true })
             end, { desc = "Format current buffer with LSP" })

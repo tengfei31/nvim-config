@@ -21,7 +21,7 @@ map("i", "<C-s>", "<Esc><cmd>w<cr>i", { desc = "Save" })
 -- macOS GUI 才支持 Command
 map("n", "<D-s>", "<cmd>w<cr>", { desc = "Save (Cmd+s)" })
 map("i", "<D-s>", "<Esc><cmd>w<cr>i", { desc = "Save (Cmd+s)" })
-map("n", "<leader>cf", function()
+map("n", "<leader>l", function()
 	vim.lsp.buf.format({ async = true })
 end, { desc = "Format code" })
 

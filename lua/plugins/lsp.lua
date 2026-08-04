@@ -162,7 +162,7 @@ return {
             vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename)
             vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action)
 
-            vim.lsp.set_log_level("error")
+            vim.lsp.log.set_level("error")
             vim.lsp.inlay_hint.enable(true)
 
             vim.diagnostic.config({

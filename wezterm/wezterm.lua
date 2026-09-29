@@ -54,41 +54,19 @@ wezterm.on('format-tab-title', function(tab)
     }
 end)
 
-wezterm.on('update-right-status', function(window, pane)
-    local scroll = pane:get_dimensions().active_line
-    local total = pane:get_dimensions().scrollback_rows
-    window:set_right_status(wezterm.format({
-        { Text = string.format(" Pos: %d/%d ", scroll, total) },
-    }))
-end)
-
+-- get_dimensions 不提供当前滚动视口位置；显示光标在缓冲区中的行号
+-- 只保留一个状态回调，避免重复覆盖右侧状态栏
 wezterm.on('update-status', function(window, pane)
-    -- 获取当前面板的维度信息
     local dims = pane:get_dimensions()
-    local status = ""
-
-    -- active_line 是当前视口的第一行
-    -- scrollback_rows 是整个缓冲区的行数
-    -- viewport_rows 是当前窗口能显示的行数
-
-    if dims.active_line == 0 then
-        status = " TOP "
-    elseif dims.active_line + dims.viewport_rows >= dims.scrollback_rows then
-        status = " BOT "
-    elseif dims.active_line + dims.viewport_rows < dims.scrollback_rows then
-        -- 计算百分比
-        local percent = math.floor(dims.active_line / (dims.scrollback_rows - dims.viewport_rows) * 100)
-        status = string.format(" %d%% ", percent)
-    else
-        -- 回到最底部时显示时间或为空
-        status = wezterm.strftime(" %H:%M:%S ")
-    end
+    local cursor = pane:get_cursor_position()
+    local total = dims.scrollback_rows
+    local row = math.max(1, math.min(total, cursor.y - dims.scrollback_top + 1))
 
     window:set_right_status(wezterm.format({
-        { Foreground = { Color = '#89b4fa' } }, -- 经典的淡蓝色，符合 macOS 审美
+        { Foreground = { Color = '#89b4fa' } },
         { Background = { Color = '#1e1e2e' } },
         { Attribute = { Italic = true } },
-        { Text = status },
+        { Text = string.format(" Cursor: %d/%d ", row, total) },
     }))
 end)
 
@@ -135,7 +113,27 @@ config.window_padding = {
     bottom = 0,
 }
 
+-- 全选当前面板及滚动历史，保留选区，等待用户复制或按 Esc 退出
+local select_all = wezterm.action_callback(function(window, pane)
+    -- 按顺序执行，确保进入复制模式后再扩展选区
+    for _, action in ipairs {
+        act.ActivateCopyMode,
+        act.CopyMode 'ClearSelectionMode',
+        act.CopyMode 'MoveToScrollbackTop',
+        act.CopyMode 'MoveToStartOfLine',
+        act.CopyMode { SetSelectionMode = 'Line' },
+        act.CopyMode 'MoveToScrollbackBottom',
+    } do
+        window:perform_action(action, pane)
+    end
+end)
+
 config.keys = {
+    -- 系统剪贴板：macOS 使用 Cmd，Windows 使用 Ctrl+Shift
+    { key = 'c', mods = 'SUPER', action = act.CopyTo 'Clipboard' },
+    { key = 'v', mods = 'SUPER', action = act.PasteFrom 'Clipboard' },
+    { key = 'c', mods = 'CTRL|SHIFT', action = act.CopyTo 'Clipboard' },
+    { key = 'v', mods = 'CTRL|SHIFT', action = act.PasteFrom 'Clipboard' },
     {
         key = 'LeftArrow',
         mods = 'OPT',
@@ -191,7 +189,12 @@ config.keys = {
             end),
         },
     },
-    { key = 'a', mods = 'CMD',  action = act.CopyMode 'MoveToStartOfLine' },
+    { key = 'a', mods = 'CMD', action = select_all },
+    {
+        key = 'a',
+        mods = wezterm.target_triple:find('windows') and 'CTRL' or 'CTRL|SHIFT',
+        action = select_all,
+    },
     { key = 'e', mods = 'CMD',  action = act.CopyMode 'MoveToEndOfLineContent' },
     { key = 'u', mods = 'CTRL', action = act.CopyMode 'ClearPattern' },
 
@@ -208,5 +211,23 @@ config.keys = {
 -- local helpers = require 'helpers'
 -- helpers.apply_to_config(config)
 
+-- Windows：有选区时右键复制并取消选区，无选区时右键粘贴
+-- 程序捕获鼠标时，按住 Shift 使用终端的选择和右键操作
+if wezterm.target_triple:find('windows') then
+    config.mouse_bindings = config.mouse_bindings or {}
+    table.insert(config.mouse_bindings, {
+        event = { Down = { streak = 1, button = 'Right' } },
+        mods = 'NONE',
+        action = wezterm.action_callback(function(window, pane)
+            local selection = window:get_selection_text_for_pane(pane)
+            if selection ~= '' then
+                window:perform_action(act.CopyTo 'Clipboard', pane)
+                window:perform_action(act.ClearSelection, pane)
+            else
+                window:perform_action(act.PasteFrom 'Clipboard', pane)
+            end
+        end),
+    })
+end
 
 return config

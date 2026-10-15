@@ -9,6 +9,8 @@ return {
     { import = "plugins.telescope" },
     { import = "plugins.appearance" },
     { import = "plugins.conform" },
+    { import = "plugins.codecompanion" },
+    { import = "plugins.markdown" },
     { import = "plugins.tree" },
     { import = "plugins.indent-blankline" },
     { import = "plugins.nvim-ufo" },

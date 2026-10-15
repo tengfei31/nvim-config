@@ -4,6 +4,7 @@ return {
         build = ":TSUpdate",
         lazy = false,
         config = function()
+            require("core.treesitter_compat").setup()
             require("nvim-treesitter.configs").setup({
                 ensure_installed = {
                     "lua", "vim", "bash", "rust",
